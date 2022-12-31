@@ -1,0 +1,29 @@
+.body {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  height:100%
+}
+
+.app {
+  height: calc(100% - 160px);
+}
+
+.sideMenu {
+   background-color: #252526
+}
+
+.App-logo {
+  height: 50vmin;
+  pointer-events: none;
+}
+
+.footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:60px; 
+  background-color: #252526;
+}
+
+
