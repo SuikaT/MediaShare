@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { ImportComponent } from './views/import.component';
+import { DropAreaComponent } from 'ngx-dnd';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ImportComponent],
+  imports: [DropAreaComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
