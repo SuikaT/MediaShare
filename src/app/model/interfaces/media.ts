@@ -1,5 +1,7 @@
-interface Media {
+import { MediaTypeEnum } from '../enums/MediaTypeEnum';
+
+export interface Media {
   title: string;
-  type: MediaEnum;
-  visible: true;
+  type: MediaTypeEnum;
+  path: string;
 }
