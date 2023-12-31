@@ -19,14 +19,14 @@ export class MediasService {
     this.retrieveAllMedia();
   }
 
-  retrieveAllMedia(): void {
+  private retrieveAllMedia(): void {
     //TODO At startup retrieve all media from path of properties file
 
     //sort in MediaListByType when we all media has been retrieved
     this.initMediaListByType();
   }
 
-  initMediaListByType(): void {
+  private initMediaListByType(): void {
     //if media list is empty don't go further
     if (this.mediaList.length == 0) return;
     //list of all MediaType
@@ -39,8 +39,7 @@ export class MediasService {
       const filteredMediaList = this.mediaList.filter(
         (media) => media.type == mediaType
       );
-      if (filteredMediaList.length > 0)
-        this.mediaListByType.set(Number(mediaType), filteredMediaList);
+      this.mediaListByType.set(Number(mediaType), filteredMediaList);
     });
   }
 }

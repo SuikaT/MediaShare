@@ -1,5 +1,13 @@
+@use "../../../themes/variables.scss" as var;
+
 :host {
   height: 7rem;
   width: 100%;
-  background-color: rgb(58, 57, 57);
+  background-color: var.$menu-background;
+  display: flex;
+  align-items: center;
+}
+
+h1 {
+  margin-left: 3.5rem;
 }
