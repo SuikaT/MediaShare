@@ -21,7 +21,6 @@ export class MediasService {
 
   private retrieveAllMedia(): void {
     //TODO At startup retrieve all media from path of properties file
-
     //sort in MediaListByType when we all media has been retrieved
     this.initMediaListByType();
   }
