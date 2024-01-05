@@ -19,11 +19,11 @@ public class MediaController {
     private Logger logger = LoggerFactory.getLogger(MediaController.class);
 
     @Autowired
-    private MediaService movieService;
+    private MediaService mediaService;
 
     @GetMapping
     public List<String> getAllMedias(){
-        movieService.findAllMedias();
+        mediaService.findAllMedias();
         return new ArrayList<>(Arrays.asList("Anime", "Movie", "test"));
     }
 

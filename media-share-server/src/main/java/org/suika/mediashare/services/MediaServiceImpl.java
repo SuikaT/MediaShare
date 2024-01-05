@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import org.suika.mediashare.model.classes.Media;
 
 @Service
-public class MediaServiceJpa implements MediaService {
+public class MediaServiceImpl implements MediaService { 
 
-    private Logger logger = LoggerFactory.getLogger(MediaServiceJpa.class);
+    private Logger logger = LoggerFactory.getLogger(MediaServiceImpl.class);
 
     @Override
     public List<Media> findAllMedias() {
