@@ -1,5 +1,7 @@
 package org.suika.mediashare.model.classes;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Media {
+public class Season {
+    String directoryName;
 
-    String name;
-    
-    String path;
+    String fullPath;
 }

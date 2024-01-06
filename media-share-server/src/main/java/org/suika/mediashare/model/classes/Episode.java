@@ -9,9 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Media {
+public class Episode {
 
     String name;
-    
-    String path;
+
+    String number;
+
+    Integer size;
 }

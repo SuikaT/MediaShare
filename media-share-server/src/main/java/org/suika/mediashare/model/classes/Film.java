@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Media {
-
-    String name;
-    
-    String path;
+public class Film extends Media {
+    //size in octet
+    Integer size; 
 }
