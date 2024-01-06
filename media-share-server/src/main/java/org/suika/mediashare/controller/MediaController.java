@@ -2,7 +2,6 @@ package org.suika.mediashare.controller;
 
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,8 @@ public class MediaController {
     private MediaService mediaService;
 
     @GetMapping
-    public List<Media> getAllMedias(){
+    public List<Media> getAllMedias() {
         return mediaService.findAllMedias();
-        // return new ArrayList<>(Arrays.asList("Anime", "Movie", "test"));
     }
 
 }
