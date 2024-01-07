@@ -14,5 +14,16 @@ import lombok.Setter;
 public class Season {
     String directoryName;
 
-    String fullPath;
+    String path;
+    // size in octet
+    long size;
+
+    List<Episode> episodeList;
+
+    public Season(String directoryName, String path, long size) {
+        this.directoryName = directoryName;
+        this.path = path;
+        this.size = size;
+    }
+
 }

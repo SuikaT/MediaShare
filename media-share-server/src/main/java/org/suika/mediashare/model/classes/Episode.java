@@ -13,7 +13,8 @@ public class Episode {
 
     String name;
 
-    String number;
+    String extension;
 
-    Integer size;
+    long size;
+
 }
