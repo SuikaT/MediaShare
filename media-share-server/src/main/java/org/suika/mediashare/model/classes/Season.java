@@ -12,6 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Season {
+
+    Integer id;
+
     String directoryName;
 
     String path;
@@ -20,7 +23,15 @@ public class Season {
 
     List<Episode> episodeList;
 
-    public Season(String directoryName, String path, long size) {
+    boolean hasRepertory = true;
+
+    public Season(Integer id, boolean hasRepertory) {
+        this.id = id;
+        this.hasRepertory = hasRepertory;
+    }
+
+    public Season(Integer id, String directoryName, String path, long size) {
+        this.id = id;
         this.directoryName = directoryName;
         this.path = path;
         this.size = size;

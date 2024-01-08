@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,48 +28,58 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     @Autowired
     ApplicationProperties appProperties;
 
+    @Autowired
+    StoreService storeService;
+
     @Override
     public void retrieveAllMedias() {
-        System.err.println(appProperties.getAnimesDirectories());
 
-        List<Media> filmList = retrieveFilms();
+        Integer index = 0;
+        List<Media> filmList = retrieveNotSeasonMedia(index);
+        List<Media> seriesList = retrieveSeasonMedia(appProperties.getSeriesDirectories(), MediaTypeEnum.SERIES, index);
+        List<Media> animeList = retrieveSeasonMedia(appProperties.getAnimesDirectories(), MediaTypeEnum.ANIME, index);
+        List<Media> allMedias = Stream.concat(
+                Stream.concat(
+                        filmList.stream(),
+                        seriesList.stream()),
+                animeList.stream())
+                .collect(Collectors.toList());
 
-        List<Media> seriesList = retrieveSeasonMedia(appProperties.getSeriesDirectories(), MediaTypeEnum.SERIES);
+        storeService.addMedias(allMedias, true);
 
-        List<Media> animeList = retrieveSeasonMedia(appProperties.getAnimesDirectories(), MediaTypeEnum.ANIME);
-        System.out.println(animeList);
     }
 
-    private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type) {
+    private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
         List<Media> mediaList = new ArrayList<>();
 
         for (String dir : directoryList) {
-            List<Media> medias = findSeasonMedias(dir, type);
+            List<Media> medias = findSeasonMedias(dir, type, index);
             mediaList.addAll(medias);
         }
 
         return mediaList;
     }
 
-    private List<Media> retrieveFilms() {
+    private List<Media> retrieveNotSeasonMedia(Integer index) {
         List<String> filmDirList = appProperties.getFilmDirectories();
         List<Media> films = new ArrayList<>();
         for (String dir : filmDirList) {
-            findDeepMedia(dir, films, MediaTypeEnum.MOVIE);
+            findDeepMedia(dir, films, MediaTypeEnum.MOVIE, index);
         }
         return films;
     }
 
     // @seasons behavior differs if searched medias can have seasons
-    private List<Media> findSeasonMedias(String dir, MediaTypeEnum type) {
+    private List<Media> findSeasonMedias(String dir, MediaTypeEnum type, Integer index) {
         List<Media> mediaList = new ArrayList<>();
         try {
             List<File> files = getFiles(dir);
             for (File file : files) {
                 if (file.isDirectory()) {
-                    Media media = new Media(file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
+                    Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
                     findSeasons(media);
                     mediaList.add(media);
+                    index++;
                 }
             }
         } catch (Exception e) {
@@ -87,13 +99,14 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     }
 
     // Retrieve all media from the given directory and all its subdirectories
-    private void findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type) {
+    private void findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type, Integer index) {
         for (File file : getFiles(dir)) {
             if (file.isDirectory()) {
-                findDeepMedia(file.getAbsolutePath(), medias, type);
+                findDeepMedia(file.getAbsolutePath(), medias, type, index);
             } else {
-                Media media = new Media(file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
+                Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
                 medias.add(media);
+                index++;
             }
         }
     }
@@ -102,24 +115,26 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         List<Season> seasonList = new ArrayList<>();
         List<Episode> episodeList = new ArrayList<>();
         List<File> fileList = getFiles(media.getPath());
-
+        Integer index = 0;
         for (File file : fileList) {
             // if it's a directory we can assume that each directory is a season
             if (file.isDirectory()) {
-                Season season = new Season(file.getName(), file.getAbsolutePath(), file.getTotalSpace());
+                Season season = new Season(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace());
                 findEpisodes(season);
                 if (season.getEpisodeList() != null && !season.getEpisodeList().isEmpty()) {
                     seasonList.add(season);
+                    index++;
                 }
             } else {
                 // On file case directly create an episode of it
-                Episode episode = new Episode(file.getName(), file.getAbsolutePath(), file.getTotalSpace());
+                Episode episode = new Episode(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace());
                 episodeList.add(episode);
+                index++;
             }
         }
         // Not empty mean than media has only one season and without dedicated directory
-        if (!episodeList.isEmpty()) {
-            Season season = new Season();
+        if (!episodeList.isEmpty() && seasonList.isEmpty()) {
+            Season season = new Season(0, false);
             season.setEpisodeList(episodeList);
             seasonList.add(season);
         }
@@ -130,10 +145,12 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     private void findEpisodes(Season season) {
         List<Episode> episodeList = new ArrayList<>();
         List<File> fileList = getFiles(season.getPath());
+        Integer index = 0;
         for (File file : fileList) {
             // if it's a directory we can assume that each directory is a season
             if (!file.isDirectory()) {
-                episodeList.add(new Episode(file.getName(), file.getAbsolutePath(), file.getTotalSpace()));
+                episodeList.add(new Episode(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace()));
+                index++;
             }
         }
 

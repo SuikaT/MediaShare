@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Episode {
 
+    Integer id;
+
     String name;
 
     String extension;

@@ -17,6 +17,8 @@ import lombok.ToString;
 @ToString
 public class Media {
 
+    Integer id;
+
     String name;
 
     String path;
@@ -27,7 +29,8 @@ public class Media {
     // size in octet
     long size;
 
-    public Media(String name, String path, MediaTypeEnum type, long size) {
+    public Media(Integer id, String name, String path, MediaTypeEnum type, long size) {
+        this.id = id;
         this.name = name;
         this.path = path;
         this.type = type;
