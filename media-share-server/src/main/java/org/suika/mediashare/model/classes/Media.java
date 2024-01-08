@@ -37,4 +37,12 @@ public class Media {
         this.size = size;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Media media) {
+            return this.id == media.getId();
+        } else
+            return false;
+    }
+
 }
