@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Media } from '../model/interfaces/media';
 import { MediaTypeEnum } from '../model/enums/MediaTypeEnum';
 import { PersistenceService } from './persistence.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,15 @@ export class MediasService {
 
   mediaListByType = new Map<MediaTypeEnum, Media[]>();
 
-  constructor(private _peristence: PersistenceService) {}
+  constructor(private _persistence: PersistenceService) {}
 
   public retrieveAllMedia(): void {
-    this._peristence.getAllMedias().subscribe((response) => {
-      console.log(response);
-      this.mediaList = response;
-      //sort in MediaListByType when we all media has been retrieved
-      this.filterMediaList();
+    this._persistence.getAllMedias().subscribe((response) => {
+      if (response) {
+        this.mediaList = response;
+        //sort in MediaListByType when we all media has been retrieved
+        this.filterMediaList();
+      }
     });
   }
 

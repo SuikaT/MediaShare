@@ -11,7 +11,7 @@ import org.suika.mediashare.model.classes.Media;
 import org.suika.mediashare.services.StoreService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @RequestMapping("/api/media")
 public class MediaController {
 
@@ -21,6 +21,11 @@ public class MediaController {
     @GetMapping
     public List<Media> getAllMedias() {
         return storeService.getMediaList();
+    }
+
+    @GetMapping("/test")
+    public String getTest() {
+        return "{\"message\": \"Test\"}";
     }
 
 }
