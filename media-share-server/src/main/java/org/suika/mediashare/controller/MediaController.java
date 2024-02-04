@@ -22,10 +22,4 @@ public class MediaController {
     public List<Media> getAllMedias() {
         return storeService.getMediaList();
     }
-
-    @GetMapping("/test")
-    public String getTest() {
-        return "{\"message\": \"Test\"}";
-    }
-
 }
