@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Media } from '../../../model/interfaces/media';
+import { Media } from '../../../model/interfaces/Media';
 import { CommonModule } from '@angular/common';
 import { MediasService } from '../../../services/medias.service';
 
