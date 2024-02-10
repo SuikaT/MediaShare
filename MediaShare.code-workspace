@@ -1,8 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "npm.enableRunFromFolder": true
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": []
+  }
 }
