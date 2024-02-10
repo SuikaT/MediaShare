@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,18 +37,18 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     public void retrieveAllMedias() {
 
         Integer index = 0;
-        List<Media> filmList = retrieveNotSeasonMedia(index);
-        List<Media> seriesList = retrieveSeasonMedia(appProperties.getSeriesDirectories(), MediaTypeEnum.SERIES, index);
-        List<Media> animeList = retrieveSeasonMedia(appProperties.getAnimesDirectories(), MediaTypeEnum.ANIME, index);
-        List<Media> allMedias = Stream.concat(
-                Stream.concat(
-                        filmList.stream(),
-                        seriesList.stream()),
-                animeList.stream())
-                .collect(Collectors.toList());
+        Map<MediaTypeEnum, List<Media>> mediaMap = new HashMap<>();
+        for (MediaTypeEnum mediaType : MediaTypeEnum.values()) {
+            List<Media> medias = new ArrayList<>();
+            if (mediaType.isSeasons())
+                medias = retrieveSeasonMedia(appProperties.getDirectories(mediaType), mediaType, index);
+            else
+                medias = retrieveNotSeasonMedia(appProperties.getDirectories(mediaType), mediaType, index);
 
-        storeService.addMedias(allMedias, true);
+            mediaMap.put(mediaType, medias);
+        }
 
+        storeService.setMediaMap(mediaMap);
     }
 
     private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
@@ -60,11 +62,10 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         return mediaList;
     }
 
-    private List<Media> retrieveNotSeasonMedia(Integer index) {
-        List<String> filmDirList = appProperties.getFilmDirectories();
+    private List<Media> retrieveNotSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
         List<Media> films = new ArrayList<>();
-        for (String dir : filmDirList) {
-            findDeepMedia(dir, films, MediaTypeEnum.MOVIE, index);
+        for (String dir : directoryList) {
+            findDeepMedia(dir, films, type, index);
         }
         return films;
     }

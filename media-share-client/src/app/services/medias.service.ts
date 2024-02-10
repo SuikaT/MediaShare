@@ -4,45 +4,51 @@ import { PersistenceService } from './persistence.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Media } from '../model/interfaces/Media';
+import { StatesService } from './states.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MediasService {
-  mediaList: Media[] = [];
-
-  constructor(private _persistence: PersistenceService) {}
-
-  $mediaListByType: BehaviorSubject<Map<MediaTypeEnum, Media[]>> = new BehaviorSubject(new Map<MediaTypeEnum, Media[]>());
-
-  get mediaListByType(): Map<MediaTypeEnum, Media[]> {
-    return this.$mediaListByType.getValue();
+  constructor(
+    private _persistence: PersistenceService,
+    private _states: StatesService,
+  ) {
+    //on section change, update displayed medias
+    this._states.$selectedSection.subscribe((section) => {
+      if (section)
+        section.mediaTypes.forEach((type) => {
+          const medias = this.mediaMap.get(type);
+          this.displayedMedias.push(...medias);
+        });
+    });
   }
 
-  set mediaListByType(mediaListByType: Map<MediaTypeEnum, Media[]>) {
-    this.$mediaListByType.next(mediaListByType);
-  }
+  $mediaMap: BehaviorSubject<Map<MediaTypeEnum, Media[]>> = new BehaviorSubject(new Map<MediaTypeEnum, Media[]>());
+
+  $displayedMedias: BehaviorSubject<Media[]> = new BehaviorSubject([]);
 
   public retrieveAllMedia(): void {
     this._persistence.getAllMedias().subscribe((response) => {
       if (response) {
-        this.mediaList = response;
-        //sort in MediaListByType when we all media has been retrieved
-        this.filterMediaList();
+        this.mediaMap = new Map(Object.entries(response).map(([key, value]) => [MediaTypeEnum[key as keyof typeof MediaTypeEnum], value as Media[]]));
       }
     });
   }
 
-  private filterMediaList(): void {
-    //if media list is empty don't go further
-    if (this.mediaList == undefined || this.mediaList.length == 0) return;
-    //list of all MediaType
-    const mediaTypes = Object.values(MediaTypeEnum).filter((value) => !isNaN(Number(value)));
+  get displayedMedias(): Media[] {
+    return this.$displayedMedias.getValue();
+  }
 
-    mediaTypes.forEach((mediaType) => {
-      //filter mediaList by type
-      const filteredMediaList = this.mediaList.filter((media) => media.type == mediaType);
-      this.mediaListByType.set(Number(mediaType), filteredMediaList);
-    });
+  set displayedMedias(displayedMedias: Media[]) {
+    this.$displayedMedias.next(displayedMedias);
+  }
+
+  get mediaMap(): Map<MediaTypeEnum, Media[]> {
+    return this.$mediaMap.getValue();
+  }
+
+  set mediaMap(mediaMap: Map<MediaTypeEnum, Media[]>) {
+    this.$mediaMap.next(mediaMap);
   }
 }

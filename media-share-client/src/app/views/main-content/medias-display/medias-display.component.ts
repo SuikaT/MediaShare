@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Media } from '../../../model/interfaces/Media';
 import { CommonModule } from '@angular/common';
 import { MediasService } from '../../../services/medias.service';
+import { MediaTypeEnum } from '../../../model/enums/MediaTypeEnum';
+import { StatesService } from '../../../services/states.service';
 
 @Component({
   selector: 'app-medias-display',
@@ -10,9 +12,15 @@ import { MediasService } from '../../../services/medias.service';
   templateUrl: './medias-display.component.html',
   styleUrl: './medias-display.component.scss',
 })
-export class MediasDisplayComponent {
+export class MediasDisplayComponent implements OnInit {
   @Input()
-  mediaType: Media;
+  mediaList: Media[] = [];
 
-  constructor(public _medias: MediasService) {}
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  test() {
+    console.log(this.mediaList);
+  }
 }

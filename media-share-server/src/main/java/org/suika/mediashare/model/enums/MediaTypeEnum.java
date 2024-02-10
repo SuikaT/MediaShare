@@ -1,8 +1,11 @@
 package org.suika.mediashare.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MediaTypeEnum {
     MOVIE(0, false),
-    SERIES(1, true),
+    SHOW(1, true),
     ANIME(2, true);
 
     int code;
@@ -13,13 +16,4 @@ public enum MediaTypeEnum {
         this.code = code;
         this.seasons = seasons;
     }
-
-    public int getCode() {
-        return code;
-    }
-
-    public boolean isSeasons() {
-        return seasons;
-    }
-
 }

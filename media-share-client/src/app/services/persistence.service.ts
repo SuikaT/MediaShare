@@ -3,6 +3,9 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Media } from '../model/interfaces/Media';
 import { HttpClient } from '@angular/common/http';
 import { apiConfig } from '../../environments/api-config';
+import { MediaTypeEnum } from '../model/enums/MediaTypeEnum';
+
+const GET_MEDIAS = '/api/medias';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +13,9 @@ import { apiConfig } from '../../environments/api-config';
 export class PersistenceService {
   SERVER_URL = apiConfig.protocol + '://' + apiConfig.host + ':' + apiConfig.port;
 
-  GET_MEDIA = '/api/media';
-
   constructor(private http: HttpClient) {}
 
-  getAllMedias(): Observable<Media[]> {
-    return this.http.get<Media[]>(this.SERVER_URL + this.GET_MEDIA, {});
+  getAllMedias(): Observable<any> {
+    return this.http.get<any>(this.SERVER_URL + GET_MEDIAS, {});
   }
 }

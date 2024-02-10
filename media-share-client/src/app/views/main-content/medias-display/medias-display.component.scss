@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+section {
+  display: inherit;
+  height: 5rem;
+  justify-content: center;
+}

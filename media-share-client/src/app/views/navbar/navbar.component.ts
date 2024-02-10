@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Section } from '../../model/interfaces/Section';
 import { MediaTypeEnum } from '../../model/enums/MediaTypeEnum';
 import { Media } from '../../model/interfaces/Media';
+import { StatesService } from '../../services/states.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +22,10 @@ export class NavbarComponent implements OnInit {
 
   excludedMedias: MediaTypeEnum[] = [];
 
-  constructor(public _medias: MediasService) {}
+  constructor(
+    private _medias: MediasService,
+    private _states: StatesService,
+  ) {}
 
   ngOnInit() {
     this.sections = this.sections.filter((section) => {
@@ -30,7 +34,9 @@ export class NavbarComponent implements OnInit {
       //filter out sections who does not have remaining media types
       return remainingMediaTypes.length > 0;
     });
+  }
 
-    console.log(this.sections);
+  changeSection(section: Section) {
+    this._states.selectedSection = section;
   }
 }
