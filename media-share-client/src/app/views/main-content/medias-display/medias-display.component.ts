@@ -19,8 +19,4 @@ export class MediasDisplayComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
-
-  test() {
-    console.log(this.mediaList);
-  }
 }

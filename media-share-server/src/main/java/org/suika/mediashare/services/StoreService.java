@@ -21,8 +21,27 @@ public class StoreService {
 
     private Map<MediaTypeEnum, List<Media>> mediaMap = new HashMap<>();
 
-    public List<Media> getMediasByType(MediaTypeEnum mediaType) {
-        return mediaMap.get(mediaType);
+    public List<Media> getMediasByType(MediaTypeEnum mediaType, Integer maxAmount, int index) {
+        try {
+
+            List<Media> mediaList = mediaMap.get(mediaType);
+            if (mediaList == null)
+                throw new IllegalArgumentException("mediaList is null");
+
+            Integer size = mediaList.size();
+            if (index >= size)
+                throw new IllegalArgumentException("required index doesn't exist");
+
+            Integer toIndex = index + maxAmount;
+            if (toIndex > size)
+                toIndex = maxAmount - (maxAmount - size);
+
+            return mediaList.subList(index, toIndex);
+
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+
     }
 
     public boolean addMedia(Media media) {
