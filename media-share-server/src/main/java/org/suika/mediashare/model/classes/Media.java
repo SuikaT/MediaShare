@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.suika.mediashare.model.enums.MediaTypeEnum;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class Media {
 
     String name;
 
+    @JsonIgnore
     String path;
 
     List<Season> seasonList;

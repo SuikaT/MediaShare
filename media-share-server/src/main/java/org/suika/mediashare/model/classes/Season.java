@@ -2,6 +2,8 @@ package org.suika.mediashare.model.classes;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ public class Season {
 
     String directoryName;
 
+    @JsonIgnore
     String path;
     // size in octet
     long size;

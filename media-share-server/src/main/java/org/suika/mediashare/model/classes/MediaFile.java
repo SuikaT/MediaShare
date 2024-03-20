@@ -1,6 +1,6 @@
 package org.suika.mediashare.model.classes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.InputStream;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,17 +9,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Episode {
+@NoArgsConstructor
+public class MediaFile {
 
-    Integer id;
+	String fileName;
 
-    String name;
-
-    @JsonIgnore
-    String path;
-
-    long size;
-
+	InputStream file;
 }

@@ -29,7 +29,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     ApplicationProperties appProperties;
 
     @Autowired
-    StoreService storeService;
+    MediaService mediaService;
 
     @Override
     public void retrieveAllMedias() {
@@ -46,7 +46,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
             mediaMap.put(mediaType, medias);
         }
 
-        storeService.setMediaMap(mediaMap);
+        mediaService.setMediaMap(mediaMap);
     }
 
     private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
