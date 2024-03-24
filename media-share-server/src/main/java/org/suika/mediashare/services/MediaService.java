@@ -1,12 +1,26 @@
 package org.suika.mediashare.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import org.suika.mediashare.model.classes.Episode;
 import org.suika.mediashare.model.classes.Media;
 import org.suika.mediashare.model.classes.MediaFile;
@@ -21,6 +35,8 @@ import lombok.Setter;
 @Component
 @Scope("singleton")
 public class MediaService {
+
+    private Logger logger = LoggerFactory.getLogger(MediaService.class);
 
     private Map<MediaTypeEnum, List<Media>> mediaMap = new HashMap<>();
 
@@ -96,13 +112,67 @@ public class MediaService {
         return season.getEpisodeList().stream().filter(e -> e.getId() == episodeId).findFirst().orElse(null);
     }
 
-    public MediaFile getMediaFile(MediaTypeEnum mediaType, Integer mediaId) {
+    public List<MediaFile> getMediaFile(MediaTypeEnum mediaType, Integer mediaId) throws IOException, NullPointerException {
         Media media = getMediaByTypeAndId(mediaType, mediaId);
 
         if (media == null)
             return null;
 
-        return new MediaFile(media.getName(), null);
+        MediaFile mediaFile = new MediaFile(media.getName());
+        // if media doesn't have season return the file directly
+        if (media.getSeasonList() == null || media.getSeasonList().isEmpty()) {
+            FileSystemResource file = new FileSystemResource(media.getPath());
+            mediaFile.setFile(file);
+        }
+
+        return Arrays.asList(mediaFile);
+    }
+
+    private byte[] zipMedia(Media media) {
+        ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+        try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOut)) {
+            // add directory to zip
+            zipOut.putNextEntry(new ZipEntry(media.getPath()));
+            zipOut.closeEntry();
+            // zip each seasons
+            for (Season season : media.getSeasonList()) {
+                zipSeason(season, zipOut);
+            }
+        } catch (IOException e) {
+            logger.error("An error occured while executing zipFiles : {}", e.getMessage());
+        }
+
+        return byteArrayOut.toByteArray();
+    }
+
+    private void zipSeason(Season season, ZipOutputStream zipOut) throws IOException {
+        // add season directory to zip if not null
+        // if its null it's a fictive directory to wrap episodes when only one season exist
+        if (season.getPath() != null) {
+            zipOut.putNextEntry(new ZipEntry(season.getPath()));
+            zipOut.closeEntry();
+        }
+
+        for (Episode episode : season.getEpisodeList()) {
+            File file = new File(episode.getPath());
+            addFileToZip(file, zipOut);
+        }
+
+    }
+
+    private void addFileToZip(File file, ZipOutputStream zipOut) {
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            ZipEntry zipEntry = new ZipEntry(file.getName());
+            zipOut.putNextEntry(zipEntry);
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fileInputStream.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+        } catch (IOException e) {
+            logger.error("An error occured while executing addFileToZip : {}", e.getMessage());
+        }
     }
 
     public MediaFile getSeasonFile(MediaTypeEnum mediaType, Integer mediaId, Integer seasonId) {
@@ -110,16 +180,26 @@ public class MediaService {
 
         if (season == null)
             return null;
-        // TODO zip medias and send them
+
         return new MediaFile(season.getDirectoryName(), null);
     }
 
-    public MediaFile getEpisodeFile(MediaTypeEnum mediaType, Integer mediaId, Integer seasonId, Integer episodeId) {
+    public MediaFile getEpisodeFile(MediaTypeEnum mediaType, Integer mediaId, Integer seasonId, Integer episodeId) throws ResponseStatusException {
         Episode episode = getEpisodeByTypeAndId(mediaType, mediaId, seasonId, episodeId);
 
-        if (episode == null)
-            return null;
+        if (episode == null) {
+            logger.error("getEpisodeFile() => episode is null for mediaType = {}, mediaId = {}, seasonId = {}, episodeId = {}", mediaType, mediaId, seasonId, episodeId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Video file not found");
+        }
 
-        return new MediaFile(episode.getName(), null);
+        File file = new File(episode.getPath());
+
+        if (!file.exists()) {
+            logger.error("getEpisodeFile() => file doesn't exist fir mediaType = {}, mediaId = {}, seasonId = {}, episodeId = {}, path = {}", mediaType, mediaId, seasonId, episodeId,
+                    episode.getPath());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Video file not found");
+        }
+
+        return new MediaFile(episode.getName(), new FileSystemResource(file));
     }
 }

@@ -1,8 +1,7 @@
 package org.suika.mediashare.model.enums;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
 public enum MediaTypeEnum {
     MOVIE(0, false), SHOW(1, true), ANIME(2, true);
 
@@ -24,4 +23,12 @@ public enum MediaTypeEnum {
         return null;
     }
 
+    @JsonValue
+    public int getCode() {
+        return code;
+    }
+
+    public boolean isSeasons() {
+        return seasons;
+    }
 }

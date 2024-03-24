@@ -31,8 +31,7 @@ export class MediasService {
   public updateDisplayedMedias(section: Section): void {
     this._persistence.getMedias(section.mediaType, 60, 0).subscribe((response) => {
       if (response) {
-        console.log(response);
-        this.mediaMap = new Map(Object.entries(response).map(([key, value]) => [MediaTypeEnum[key as keyof typeof MediaTypeEnum], value as Media[]]));
+        this.displayedMedias = response;
       }
     });
   }

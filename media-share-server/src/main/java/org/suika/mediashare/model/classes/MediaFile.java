@@ -1,19 +1,25 @@
 package org.suika.mediashare.model.classes;
 
-import java.io.InputStream;
+import org.springframework.core.io.Resource;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class MediaFile {
+
+	public MediaFile(String fileName) {
+		this.fileName = fileName;
+	}
 
 	String fileName;
 
-	InputStream file;
+	Resource file;
 }
