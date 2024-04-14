@@ -3,6 +3,8 @@ import { MediasDisplayComponent } from './medias-display/medias-display.componen
 import { MediasService } from '../../services/medias.service';
 import { Section } from '../../model/interfaces/Section';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { StatesService } from '../../services/states.service';
 
 @Component({
   selector: 'app-main-content',
@@ -12,7 +14,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './main-content.component.scss',
 })
 export class MainContentComponent implements OnInit {
-  constructor(public _medias: MediasService) {}
+  constructor(
+    public _medias: MediasService,
+    private _states: StatesService,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._states.$selectedSection.subscribe((section) => {
+      if (section) this._medias.updateDisplayedMedias(section);
+    });
+  }
 }

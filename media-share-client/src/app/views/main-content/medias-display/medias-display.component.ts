@@ -6,6 +6,7 @@ import { MediaTypeEnum } from '../../../model/enums/MediaTypeEnum';
 import { StatesService } from '../../../services/states.service';
 import { PersistenceService } from '../../../services/persistence.service';
 import { MediaFile } from '../../../model/interfaces/MediaFile';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-medias-display',
@@ -18,7 +19,10 @@ export class MediasDisplayComponent implements OnInit {
   @Input()
   mediaList: Media[] = [];
 
-  constructor(private _persistence: PersistenceService) {}
+  constructor(
+    private _persistence: PersistenceService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -64,5 +68,9 @@ export class MediasDisplayComponent implements OnInit {
 
     //mkv as default
     return 'video/x-matroska';
+  }
+
+  navigateToDetails(media: Media) {
+    this.router.navigate(['/media-detail', media?.id]);
   }
 }

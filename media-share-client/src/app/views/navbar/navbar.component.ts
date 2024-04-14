@@ -5,6 +5,7 @@ import { Section } from '../../model/interfaces/Section';
 import { MediaTypeEnum } from '../../model/enums/MediaTypeEnum';
 import { Media } from '../../model/interfaces/Media';
 import { StatesService } from '../../services/states.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -25,12 +26,13 @@ export class NavbarComponent implements OnInit {
   constructor(
     private _medias: MediasService,
     private _states: StatesService,
+    private router: Router,
   ) {}
 
   ngOnInit() {}
 
   changeSection(section: Section) {
     this._states.selectedSection = section;
-    this._medias.updateDisplayedMedias(section);
+    this.router.navigate(['']);
   }
 }

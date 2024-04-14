@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './views/header/header.component';
 import { NavbarComponent } from './views/navbar/navbar.component';
 import { MainContentComponent } from './views/main-content/main-content.component';
@@ -11,12 +11,7 @@ import { PersistenceService } from './services/persistence.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    HeaderComponent,
-    NavbarComponent,
-    MainContentComponent,
-    HttpClientModule,
-  ],
+  imports: [HeaderComponent, NavbarComponent, MainContentComponent, HttpClientModule, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

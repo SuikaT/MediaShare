@@ -8,4 +8,10 @@ section {
   height: 5rem;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  border-bottom: grey solid 1px;
+}
+
+section:hover {
+  opacity: 0.7;
 }
