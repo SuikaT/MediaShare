@@ -75,7 +75,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
             List<File> files = getFiles(dir);
             for (File file : files) {
                 if (file.isDirectory()) {
-                    Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
+                    Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.length());
                     findSeasons(media);
                     mediaList.add(media);
                     index++;
@@ -103,7 +103,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
             if (file.isDirectory()) {
                 findDeepMedia(file.getAbsolutePath(), medias, type, index);
             } else {
-                Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.getTotalSpace());
+                Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.length());
                 medias.add(media);
                 index++;
             }
@@ -118,7 +118,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         for (File file : fileList) {
             // if it's a directory we can assume that each directory is a season
             if (file.isDirectory()) {
-                Season season = new Season(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace());
+                Season season = new Season(index, file.getName(), file.getAbsolutePath(), file.length());
                 findEpisodes(season);
                 if (season.getEpisodeList() != null && !season.getEpisodeList().isEmpty()) {
                     seasonList.add(season);
@@ -126,7 +126,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
                 }
             } else {
                 // On file case directly create an episode of it
-                Episode episode = new Episode(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace());
+                Episode episode = new Episode(index, file.getName(), file.getAbsolutePath(), file.length());
                 episodeList.add(episode);
                 index++;
             }
@@ -148,7 +148,7 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         for (File file : fileList) {
             // if it's a directory we can assume that each directory is a season
             if (!file.isDirectory()) {
-                episodeList.add(new Episode(index, file.getName(), file.getAbsolutePath(), file.getTotalSpace()));
+                episodeList.add(new Episode(index, file.getName(), file.getAbsolutePath(), file.length()));
                 index++;
             }
         }

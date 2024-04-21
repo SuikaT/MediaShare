@@ -20,6 +20,10 @@ export class MediasService {
 
   $displayedMedias: BehaviorSubject<Media[]> = new BehaviorSubject([]);
 
+  seasonMedias = [MediaTypeEnum.ANIME, MediaTypeEnum.SHOW];
+
+  $mediaDetail: BehaviorSubject<Media> = new BehaviorSubject(undefined);
+
   public retrieveAllMedia(): void {
     this._persistence.getAllMedias().subscribe((response) => {
       if (response) {
@@ -50,5 +54,17 @@ export class MediasService {
 
   set mediaMap(mediaMap: Map<MediaTypeEnum, Media[]>) {
     this.$mediaMap.next(mediaMap);
+  }
+
+  set mediaDetail(mediaDetail: Media) {
+    this.$mediaDetail.next(mediaDetail);
+  }
+
+  get mediaDetail(): Media {
+    return this.$mediaDetail.getValue();
+  }
+
+  isSeasonMedia(mediaType: MediaTypeEnum) {
+    return this.seasonMedias.includes(mediaType);
   }
 }

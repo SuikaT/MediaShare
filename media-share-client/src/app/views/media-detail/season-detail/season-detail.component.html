@@ -1,0 +1,8 @@
+@if (season) {
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      {{ season.directoryName }}
+    </mat-expansion-panel-header>
+    <app-episode-list [episodeList]="season.episodeList"></app-episode-list>
+  </mat-expansion-panel>
+}
