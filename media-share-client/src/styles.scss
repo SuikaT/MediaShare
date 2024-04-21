@@ -10,3 +10,14 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.mdc-icon-button {
+  --mat-icon-button-ripple-color: none;
+  --mat-icon-button-hover-state-layer-opacity: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+  --mat-icon-button-pressed-state-layer-opacity: 0; //remove ripple
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

@@ -1,13 +1,40 @@
 @use "../../../themes/variables.scss" as var;
 
 :host {
-  height: 7rem;
+  min-height: 8rem;
   width: 100%;
   background-color: var.$menu-background;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  padding: 0 20%;
 }
 
-h1 {
-  margin-left: 3.5rem;
+.upper {
+  height: 60%;
+  display: flex;
+  padding-left: 2rem;
+}
+
+.lower {
+  height: 40%;
+  display: flex;
+  border-left: 1px solid #232323a7;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 8rem;
+  border-top: 1px solid #232323a7;
+  border-right: 1px solid #232323a7;
+
+  &:hover {
+    background-color: #3c3b3b;
+
+    label {
+      opacity: 1;
+    }
+  }
 }

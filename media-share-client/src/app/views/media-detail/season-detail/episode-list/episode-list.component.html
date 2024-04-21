@@ -2,6 +2,10 @@
   <div class="item">
     <label>{{ episode.name }}</label>
     <label>{{ episode.size | parseSize }}</label>
-    <mat-icon>download</mat-icon>
+    <div class="button-container">
+      <button mat-icon-button>
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
   </div>
 }

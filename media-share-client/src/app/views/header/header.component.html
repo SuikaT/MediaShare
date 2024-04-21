@@ -1,1 +1,10 @@
-<h1>MediaShare</h1>
+<section class="upper">
+  <h1>MediaShare</h1>
+</section>
+<section class="lower">
+  @for (section of sections; track section) {
+    <div class="section" (click)="changeSection(section)">
+      <label>{{ section.name }}</label>
+    </div>
+  }
+</section>
