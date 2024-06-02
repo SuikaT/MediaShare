@@ -39,7 +39,7 @@ public class MediaController {
     @GetMapping("mediasByType")
     public List<Media> getMediasByType(@RequestParam("mediaType") Integer mediaCode, @RequestParam("maxAmount") Integer maxAmount, @RequestParam("index") int index) {
         MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
-
+        
         return mediaService.getMediasByType(mediaType, maxAmount, index);
     }
 
