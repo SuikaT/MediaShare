@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 import org.suika.mediashare.model.classes.Episode;
 import org.suika.mediashare.model.classes.Media;
@@ -112,18 +113,42 @@ public class MediaService {
 
     public List<MediaFile> getMediaFile(MediaTypeEnum mediaType, Integer mediaId) throws IOException, NullPointerException {
         Media media = getMediaByTypeAndId(mediaType, mediaId);
+        List<MediaFile> mediaFiles = new ArrayList<>();
 
         if (media == null)
-            return null;
+            return new ArrayList<>();
 
-        MediaFile mediaFile = new MediaFile(media.getName());
         // if media doesn't have season return the file directly
-        if (media.getSeasonList() == null || media.getSeasonList().isEmpty()) {
-            FileSystemResource file = new FileSystemResource(media.getPath());
-            mediaFile.setFile(file);
+        if (CollectionUtils.isEmpty(media.getSeasonList())) {
+            MediaFile mediaFile = buildMediaFile(media);
+            mediaFiles.add(mediaFile);
+        } else {
+            for (Season season : media.getSeasonList()) {
+                if (!CollectionUtils.isEmpty(season.getEpisodeList())) {
+                    for (Episode episode : season.getEpisodeList()) {
+                        MediaFile episodeFile = buildEpisodeFile(episode);
+                        mediaFiles.add(episodeFile);
+                    }
+                }
+            }
         }
+        return mediaFiles;
+    }
 
-        return Arrays.asList(mediaFile);
+    private MediaFile buildMediaFile(Media media) {
+        MediaFile mediaFile = new MediaFile(media.getName());
+        FileSystemResource file = new FileSystemResource(media.getPath());
+        mediaFile.setFile(file);
+
+        return mediaFile;
+    }
+
+    private MediaFile buildEpisodeFile(Episode episode) {
+        MediaFile mediaFile = new MediaFile(episode.getName());
+        FileSystemResource file = new FileSystemResource(episode.getPath());
+        mediaFile.setFile(file);
+
+        return mediaFile;
     }
 
     private byte[] zipMedia(Media media) {

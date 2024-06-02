@@ -98,16 +98,18 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     }
 
     // Retrieve all media from the given directory and all its subdirectories
-    private void findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type, Integer index) {
+    private Integer findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type, Integer index) {
         for (File file : getFiles(dir)) {
             if (file.isDirectory()) {
-                findDeepMedia(file.getAbsolutePath(), medias, type, index);
+                index = findDeepMedia(file.getAbsolutePath(), medias, type, index);
             } else {
                 Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.length());
                 medias.add(media);
                 index++;
             }
         }
+
+        return index;
     }
 
     private void findSeasons(Media media) {

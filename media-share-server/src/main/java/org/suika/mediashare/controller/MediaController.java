@@ -1,5 +1,6 @@
 package org.suika.mediashare.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +40,13 @@ public class MediaController {
     @GetMapping("mediasByType")
     public List<Media> getMediasByType(@RequestParam("mediaType") Integer mediaCode, @RequestParam("maxAmount") Integer maxAmount, @RequestParam("index") int index) {
         MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
-        
+
         return mediaService.getMediasByType(mediaType, maxAmount, index);
     }
 
     @GetMapping("mediaFile/{mediaType}/{mediaId}")
     public List<MediaFile> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
         MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
-
         try {
             return mediaService.getMediaFile(mediaType, mediaId);
         } catch (Exception e) {
@@ -76,6 +76,31 @@ public class MediaController {
         headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 
         return ResponseEntity.ok().headers(headers).body(mediaFile.getFile());
+    }
+
+    @GetMapping("movieFile/{mediaType}/{mediaId}")
+    public ResponseEntity<Resource> getMovieFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
+        MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
+
+        List<MediaFile> mediaFiles;
+        try {
+            mediaFiles = mediaService.getMediaFile(mediaType, mediaId);
+            // we should only retrieve one element, if we got more it means its not a movie
+            if (mediaFiles != null && mediaFiles.size() == 1) {
+                MediaFile mediaFile = mediaFiles.get(0);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                headers.setContentDispositionFormData("attachment", mediaFile.getFileName());
+                headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+
+                return ResponseEntity.ok().headers(headers).body(mediaFile.getFile());
+            }
+        } catch (IOException e) {
+            logger.error("An error occured while executing getMovieFile: {}", e.getMessage());
+        }
+
+        return null;
     }
 
 }
