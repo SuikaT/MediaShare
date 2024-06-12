@@ -44,6 +44,13 @@ public class MediaController {
         return mediaService.getMediasByType(mediaType, maxAmount, index);
     }
 
+    @GetMapping("media")
+    public Media getMedia(@RequestParam("mediaType") Integer mediaCode, @RequestParam("mediaId") Integer mediaId) {
+        MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
+
+        return mediaService.getMediaByTypeAndId(mediaType, mediaId);
+    }
+
     @GetMapping("mediaFile/{mediaType}/{mediaId}/{seasonId}/{episodeId}")
     public ResponseEntity<Resource> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId, @PathVariable("seasonId") Integer seasonId,
             @PathVariable("episodeId") Integer episodeId) {

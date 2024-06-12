@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Season } from '../../model/interfaces/Season';
 import { EpisodeListComponent } from './season-detail/episode-list/episode-list.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-media-detail',
@@ -20,6 +21,7 @@ export class MediaDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public _medias: MediasService,
+    private _persistence: PersistenceService,
   ) {}
 
   media: Media;
@@ -27,20 +29,27 @@ export class MediaDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      const id = params['mid']; // Access the 'id' parameter
+      // Access parameters
+      const id = params['mid'];
+      const type = params['mtype'];
 
-      if (id == undefined) this.router.navigate(['']);
+      if (id == undefined || type == undefined) this.router.navigate(['']);
 
       const mediaTarget = this._medias.displayedMedias.find((m) => m.id == id);
 
       if (!mediaTarget) {
-        //TODO CALL BACKEND
-        this.router.navigate(['']);
+        this._persistence.getMedia(type, id).subscribe((media) => this.initMediaDetail(media));
       } else {
-        this.isSeason = this._medias.isSeasonMedia(mediaTarget.type);
-        this._medias.mediaDetail = mediaTarget;
-        this.media = this._medias.mediaDetail;
+        this.initMediaDetail(mediaTarget);
       }
     });
+  }
+
+  private initMediaDetail(media: Media) {
+    if (media) {
+      this.isSeason = this._medias.isSeasonMedia(media.type);
+      this._medias.mediaDetail = media;
+      this.media = this._medias.mediaDetail;
+    }
   }
 }

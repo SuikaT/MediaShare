@@ -7,9 +7,10 @@ import { MediaTypeEnum } from '../model/enums/MediaTypeEnum';
 import { MediaFile } from '../model/interfaces/MediaFile';
 import { first, take } from 'rxjs';
 
-const GET_MEDIAS = '/api/medias';
-const GET_MEDIAS_BY_TYPE = '/api/mediasByType';
-const GET_MEDIAFILE = '/api/mediaFile/';
+const MEDIAS = '/api/medias';
+const MEDIAS_BY_TYPE = '/api/mediasByType';
+const MEDIAFILE = '/api/mediaFile/';
+const MEDIA = '/api/media';
 
 @Injectable({
   providedIn: 'root',
@@ -20,21 +21,25 @@ export class PersistenceService {
   constructor(private http: HttpClient) {}
 
   getAllMedias(): Observable<Map<MediaTypeEnum, Media[]>> {
-    return this.http.get<any>(this.SERVER_URL + GET_MEDIAS, {}).pipe(first());
+    return this.http.get<Map<MediaTypeEnum, Media[]>>(this.SERVER_URL + MEDIAS, {}).pipe(first());
   }
 
   getMedias(mediaTypes: MediaTypeEnum, maxAmount: number, index: number): Observable<Media[]> {
-    return this.http.get<any>(this.SERVER_URL + GET_MEDIAS_BY_TYPE, { params: { mediaType: mediaTypes, maxAmount: maxAmount, index: index } }).pipe(first());
+    return this.http.get<Media[]>(this.SERVER_URL + MEDIAS_BY_TYPE, { params: { mediaType: mediaTypes, maxAmount: maxAmount, index: index } }).pipe(first());
+  }
+
+  getMedia(mediaType: MediaTypeEnum, mediaId: number): Observable<Media> {
+    return this.http.get<Media>(this.SERVER_URL + MEDIA, { params: { mediaType: mediaType, mediaId: mediaId } }).pipe(first());
   }
 
   getMediaFile(mediaType: MediaTypeEnum, mediaId: number, seasonId: number, episodeId: number): Observable<HttpResponse<Blob>> {
-    const url = this.SERVER_URL + GET_MEDIAFILE + `${mediaType}/${mediaId}/${seasonId}/${episodeId}`;
+    const url = this.SERVER_URL + MEDIAFILE + `${mediaType}/${mediaId}/${seasonId}/${episodeId}`;
 
     return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
   }
 
   getMovieFile(mediaType: MediaTypeEnum, mediaId: number): Observable<HttpResponse<Blob>> {
-    const url = this.SERVER_URL + GET_MEDIAFILE + `${mediaType}/${mediaId}`;
+    const url = this.SERVER_URL + MEDIAFILE + `${mediaType}/${mediaId}`;
 
     return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
   }

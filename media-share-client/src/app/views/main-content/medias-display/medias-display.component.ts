@@ -25,6 +25,6 @@ export class MediasDisplayComponent {
   ) {}
 
   navigateToDetails(media: Media) {
-    this.router.navigate(['/media-detail', media?.id]);
+    this.router.navigate(['/media-detail', media.type, media?.id]);
   }
 }
