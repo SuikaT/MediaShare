@@ -8,6 +8,10 @@ h2 {
   align-self: center;
 }
 
+section {
+  align-self: center;
+}
+
 .season-container {
   display: flex;
   flex-direction: column;
@@ -18,4 +22,9 @@ h2 {
     max-width: fit-content;
     color: white;
   }
+}
+
+button div {
+  display: flex;
+  align-items: center;
 }

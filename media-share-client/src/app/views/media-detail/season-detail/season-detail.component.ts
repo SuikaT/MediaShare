@@ -7,6 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Media } from '../../../model/interfaces/Media';
 
 @Component({
   selector: 'app-season-detail',
@@ -19,5 +20,8 @@ export class SeasonDetailComponent {
   @Input()
   season: Season;
 
-  constructor() {}
+  @Input()
+  media: Media;
+
+  constructor(public _medias: MediasService) {}
 }

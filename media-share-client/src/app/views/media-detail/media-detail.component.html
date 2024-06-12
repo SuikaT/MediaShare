@@ -1,15 +1,23 @@
 @if (media) {
   <h2>{{ media.name }}</h2>
-
-  @if (isSeason && media.seasonList.length != 0) {
-    @if (media.seasonList.length == 1) {
-      <app-episode-list [episodeList]="media.seasonList[0].episodeList"></app-episode-list>
-    } @else {
-      <section class="season-container">
-        @for (season of media.seasonList; track season) {
-          <app-season-detail [season]="season"></app-season-detail>
-        }
-      </section>
+  <section>
+    @if (isSeason && media.seasonList.length > 0) {
+      @if (media.seasonList.length == 1) {
+        <app-episode-list [season]="media.seasonList[0]" [media]="media"></app-episode-list>
+      } @else {
+        <section class="season-container">
+          @for (season of media.seasonList; track season) {
+            <app-season-detail [season]="season" [media]="media"></app-season-detail>
+          }
+        </section>
+      }
+    } @else if (!isSeason) {
+      <button mat-flat-button color="primary" (click)="_medias.downloadMedia(media)">
+        <div>
+          <div>Télécharger</div>
+          <mat-icon>download</mat-icon>
+        </div>
+      </button>
     }
-  }
+  </section>
 }

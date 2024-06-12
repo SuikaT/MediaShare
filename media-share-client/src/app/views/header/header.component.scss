@@ -2,7 +2,6 @@
 
 :host {
   min-height: 8rem;
-  width: 100%;
   background-color: var.$menu-background;
   display: flex;
   flex-direction: column;
@@ -35,6 +34,7 @@
 
     label {
       opacity: 1;
+      cursor: pointer;
     }
   }
 }

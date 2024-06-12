@@ -44,24 +44,6 @@ public class MediaController {
         return mediaService.getMediasByType(mediaType, maxAmount, index);
     }
 
-    @GetMapping("mediaFile/{mediaType}/{mediaId}")
-    public List<MediaFile> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
-        MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
-        try {
-            return mediaService.getMediaFile(mediaType, mediaId);
-        } catch (Exception e) {
-            logger.error("An error occured while executing getMediaFile: {}", e.getMessage());
-            return null;
-        }
-    }
-
-    @GetMapping("mediaFile/{mediaType}/{mediaId}/{seasonId}")
-    public MediaFile getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId, @PathVariable("seasonId") Integer seasonId) {
-        MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
-
-        return mediaService.getSeasonFile(mediaType, mediaId, seasonId);
-    }
-
     @GetMapping("mediaFile/{mediaType}/{mediaId}/{seasonId}/{episodeId}")
     public ResponseEntity<Resource> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId, @PathVariable("seasonId") Integer seasonId,
             @PathVariable("episodeId") Integer episodeId) {
@@ -78,8 +60,8 @@ public class MediaController {
         return ResponseEntity.ok().headers(headers).body(mediaFile.getFile());
     }
 
-    @GetMapping("movieFile/{mediaType}/{mediaId}")
-    public ResponseEntity<Resource> getMovieFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
+    @GetMapping("mediaFile/{mediaType}/{mediaId}")
+    public ResponseEntity<Resource> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
         MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
 
         List<MediaFile> mediaFiles;
@@ -102,5 +84,4 @@ public class MediaController {
 
         return null;
     }
-
 }

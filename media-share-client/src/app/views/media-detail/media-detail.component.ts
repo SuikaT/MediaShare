@@ -6,19 +6,20 @@ import { SeasonDetailComponent } from './season-detail/season-detail.component';
 import { MatButtonModule } from '@angular/material/button';
 import { Season } from '../../model/interfaces/Season';
 import { EpisodeListComponent } from './season-detail/episode-list/episode-list.component';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-media-detail',
   standalone: true,
   templateUrl: './media-detail.component.html',
   styleUrl: './media-detail.component.scss',
-  imports: [SeasonDetailComponent, MatButtonModule, RouterModule, EpisodeListComponent],
+  imports: [SeasonDetailComponent, MatButtonModule, RouterModule, EpisodeListComponent, MatIconModule],
 })
 export class MediaDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private _media: MediasService,
+    public _medias: MediasService,
   ) {}
 
   media: Media;
@@ -30,16 +31,15 @@ export class MediaDetailComponent implements OnInit {
 
       if (id == undefined) this.router.navigate(['']);
 
-      const mediaTarget = this._media.displayedMedias.find((m) => m.id == id);
+      const mediaTarget = this._medias.displayedMedias.find((m) => m.id == id);
 
-      console.log(mediaTarget);
       if (!mediaTarget) {
         //TODO CALL BACKEND
         this.router.navigate(['']);
       } else {
-        this.isSeason = this._media.isSeasonMedia(mediaTarget.type);
-        this._media.mediaDetail = mediaTarget;
-        this.media = this._media.mediaDetail;
+        this.isSeason = this._medias.isSeasonMedia(mediaTarget.type);
+        this._medias.mediaDetail = mediaTarget;
+        this.media = this._medias.mediaDetail;
       }
     });
   }

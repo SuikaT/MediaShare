@@ -27,8 +27,14 @@ export class PersistenceService {
     return this.http.get<any>(this.SERVER_URL + GET_MEDIAS_BY_TYPE, { params: { mediaType: mediaTypes, maxAmount: maxAmount, index: index } }).pipe(first());
   }
 
-  getEpisode(mediaType: MediaTypeEnum, mediaId: number, seasonId: number, episodeId: number): Observable<HttpResponse<Blob>> {
+  getMediaFile(mediaType: MediaTypeEnum, mediaId: number, seasonId: number, episodeId: number): Observable<HttpResponse<Blob>> {
     const url = this.SERVER_URL + GET_MEDIAFILE + `${mediaType}/${mediaId}/${seasonId}/${episodeId}`;
+
+    return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
+  }
+
+  getMovieFile(mediaType: MediaTypeEnum, mediaId: number): Observable<HttpResponse<Blob>> {
+    const url = this.SERVER_URL + GET_MEDIAFILE + `${mediaType}/${mediaId}`;
 
     return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
   }
