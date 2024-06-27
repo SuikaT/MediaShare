@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -223,5 +226,12 @@ public class MediaService {
         }
 
         return new MediaFile(episode.getName(), new FileSystemResource(file));
+    }
+
+    public List<Media> searchMedias(String searchKey) {
+        // allMedias as one list
+        List<Media> allMedias = mediaMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+        // search for name containing the search Key
+        return allMedias.stream().filter(media -> StringUtils.containsIgnoreCase(media.getName(), searchKey)).toList();
     }
 }

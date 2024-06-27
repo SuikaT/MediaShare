@@ -3,11 +3,12 @@ import { Section } from '../../model/interfaces/Section';
 import { StatesService } from '../../services/states.service';
 import { Router } from '@angular/router';
 import { MediaTypeEnum } from '../../model/enums/MediaTypeEnum';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [SearchBarComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

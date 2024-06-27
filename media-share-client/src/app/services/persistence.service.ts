@@ -11,6 +11,7 @@ const MEDIAS = '/api/medias';
 const MEDIAS_BY_TYPE = '/api/mediasByType';
 const MEDIAFILE = '/api/mediaFile/';
 const MEDIA = '/api/media';
+const SEARCH_MEDIAS = '/api/searchMedias';
 
 @Injectable({
   providedIn: 'root',
@@ -42,5 +43,9 @@ export class PersistenceService {
     const url = this.SERVER_URL + MEDIAFILE + `${mediaType}/${mediaId}`;
 
     return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
+  }
+
+  searchMedias(searchKey: string): Observable<Media[]> {
+    return this.http.get<Media[]>(this.SERVER_URL + SEARCH_MEDIAS, { params: { searchKey: searchKey } }).pipe(first());
   }
 }

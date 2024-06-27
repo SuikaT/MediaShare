@@ -11,7 +11,9 @@
 .upper {
   height: 60%;
   display: flex;
+  gap: 2rem;
   padding-left: 2rem;
+  align-items: center;
 }
 
 .lower {
@@ -37,4 +39,8 @@
       cursor: pointer;
     }
   }
+}
+
+app-search-bar {
+  width: 25rem;
 }

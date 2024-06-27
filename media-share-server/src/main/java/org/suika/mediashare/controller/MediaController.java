@@ -91,4 +91,9 @@ public class MediaController {
 
         return null;
     }
+
+    @GetMapping("searchMedias")
+    public List<Media> searchMedias(@RequestParam("searchKey") String searchKey) {
+        return mediaService.searchMedias(searchKey);
+    }
 }
