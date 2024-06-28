@@ -13,6 +13,12 @@ import lombok.Getter;
 @Component
 public class ApplicationProperties {
 
+    @Value("${client.port}")
+    private String clientPort;
+
+    @Value("${ip}")
+    private String ip;
+
     @Value("${excluded.medias}")
     private List<String> excludedMedias;
 
@@ -27,14 +33,14 @@ public class ApplicationProperties {
 
     public List<String> getDirectories(MediaTypeEnum mediaType) {
         switch (mediaType) {
-            case ANIME:
-                return animesDirectories;
-            case SHOW:
-                return showsDirectories;
-            case MOVIE:
-                return moviesDirectories;
-            default:
-                return new ArrayList<>();
+        case ANIME:
+            return animesDirectories;
+        case SHOW:
+            return showsDirectories;
+        case MOVIE:
+            return moviesDirectories;
+        default:
+            return new ArrayList<>();
         }
     }
 
