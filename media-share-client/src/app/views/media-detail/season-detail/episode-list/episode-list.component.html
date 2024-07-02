@@ -1,18 +1,8 @@
 @for (episode of season?.episodeList; track episode) {
-  <div class="item">
-    <label>{{ episode.name }}</label>
-    <label>{{ episode.size | parseSize }}</label>
-    <div class="button-container">
-      <button mat-icon-button (click)="download(episode)">
-        <mat-icon>download</mat-icon>
-      </button>
-    </div>
-  </div>
+  <app-episode [media]="media" [season]="season" [episode]="episode" [downloadEvent]="downloadEvent$"></app-episode>
 }
 
-<button mat-flat-button color="primary" (click)="_medias.downloadSeason(media, season)">
-  <div>
-    <div>Télécharger tout</div>
-    <mat-icon>download</mat-icon>
-  </div>
+<button mat-flat-button color="primary" (click)="downloadAll()">
+  <mat-icon>download</mat-icon>
+  <div>Télécharger tout</div>
 </button>

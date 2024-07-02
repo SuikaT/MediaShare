@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'parseSize',
   standalone: true,
 })
-export class ParseSizePipePipe implements PipeTransform {
+export class ParseSizePipe implements PipeTransform {
   capacity = ['Ko', 'Mo', 'Go', 'To'];
 
   transform(value: number): string {

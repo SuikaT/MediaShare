@@ -2,12 +2,7 @@
   <h2>{{ media.name }}</h2>
   <section>
     @if (!isSeason) {
-      <button mat-flat-button color="primary" (click)="_medias.downloadMedia(media)">
-        <div>
-          <div>Télécharger</div>
-          <mat-icon>download</mat-icon>
-        </div>
-      </button>
+      <app-movie [media]="media"></app-movie>
     } @else if (media.seasonList.length > 0) {
       @if (media.seasonList.length == 1) {
         <app-episode-list [season]="media.seasonList[0]" [media]="media"></app-episode-list>

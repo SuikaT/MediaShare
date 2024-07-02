@@ -14,7 +14,7 @@ import { Media } from '../../../model/interfaces/Media';
   standalone: true,
   templateUrl: './season-detail.component.html',
   styleUrl: './season-detail.component.scss',
-  imports: [MatExpansionModule, EpisodeListComponent, MatButtonModule, MatIconModule],
+  imports: [MatExpansionModule, EpisodeListComponent],
 })
 export class SeasonDetailComponent {
   @Input()
@@ -22,6 +22,4 @@ export class SeasonDetailComponent {
 
   @Input()
   media: Media;
-
-  constructor(public _medias: MediasService) {}
 }

@@ -8,13 +8,19 @@ import { Season } from '../../model/interfaces/Season';
 import { EpisodeListComponent } from './season-detail/episode-list/episode-list.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { PersistenceService } from '../../services/persistence.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MediaFile } from '../../model/interfaces/MediaFile';
+import { HttpResponse } from '@angular/common/http';
+import { MovieComponent } from './movie/movie.component';
 
 @Component({
   selector: 'app-media-detail',
   standalone: true,
   templateUrl: './media-detail.component.html',
   styleUrl: './media-detail.component.scss',
-  imports: [SeasonDetailComponent, MatButtonModule, RouterModule, EpisodeListComponent, MatIconModule],
+  imports: [SeasonDetailComponent, RouterModule, EpisodeListComponent, MovieComponent],
 })
 export class MediaDetailComponent implements OnInit {
   constructor(

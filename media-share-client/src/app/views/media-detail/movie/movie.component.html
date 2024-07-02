@@ -1,0 +1,10 @@
+<button mat-flat-button color="primary" (click)="downloadMedia()">
+  <div>
+    <mat-progress-spinner *ngIf="progress > 0" class="button-spinner-progress" [value]="progress$ | async"></mat-progress-spinner>
+    <mat-icon *ngIf="progress == 0">download</mat-icon>
+    <div>Télécharger</div>
+  </div>
+</button>
+@if (downloaded) {
+  <mat-icon>check</mat-icon>
+}

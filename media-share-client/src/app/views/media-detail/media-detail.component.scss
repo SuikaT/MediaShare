@@ -10,6 +10,9 @@ h2 {
 
 section {
   align-self: center;
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
 }
 
 .season-container {

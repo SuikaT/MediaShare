@@ -1,6 +1,6 @@
 @if (season) {
   <mat-expansion-panel>
-    <mat-expansion-panel-header (click)="_medias.downloadSeason(media, season)">
+    <mat-expansion-panel-header>
       <div>{{ season.directoryName }}</div>
     </mat-expansion-panel-header>
     <app-episode-list [season]="season" [media]="media"></app-episode-list>

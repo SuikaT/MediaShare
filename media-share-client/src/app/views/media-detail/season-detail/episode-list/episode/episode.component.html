@@ -1,0 +1,13 @@
+<label>{{ episode.name }}</label>
+<label>{{ episode.size | parseSize }}</label>
+<div class="button-container">
+  <button mat-icon-button (click)="download()">
+    <mat-icon>download</mat-icon>
+  </button>
+
+  @if (progress > 0) {
+    <mat-progress-spinner class="button-spinner-progress" mode="determinate" [value]="progress$ | async"> </mat-progress-spinner>
+  } @else if (downloaded) {
+    <mat-icon>check</mat-icon>
+  }
+</div>

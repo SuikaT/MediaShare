@@ -21,3 +21,12 @@ body {
     opacity: 0.7;
   }
 }
+
+mat-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #{var.$text-1};
+}
+
+.button-spinner-progress {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}

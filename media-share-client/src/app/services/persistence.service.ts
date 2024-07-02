@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Media } from '../model/interfaces/Media';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common/http';
 import { apiConfig } from '../../environments/api-config';
 import { MediaTypeEnum } from '../model/enums/MediaTypeEnum';
 import { MediaFile } from '../model/interfaces/MediaFile';
@@ -33,16 +33,17 @@ export class PersistenceService {
     return this.http.get<Media>(this.SERVER_URL + MEDIA, { params: { mediaType: mediaType, mediaId: mediaId } }).pipe(first());
   }
 
-  getMediaFile(mediaType: MediaTypeEnum, mediaId: number, seasonId: number, episodeId: number): Observable<HttpResponse<Blob>> {
+  getMediaFile(mediaType: MediaTypeEnum, mediaId: number, seasonId: number, episodeId: number): Observable<HttpEvent<Blob>> {
     const url = this.SERVER_URL + MEDIAFILE + `${mediaType}/${mediaId}/${seasonId}/${episodeId}`;
 
-    return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
+    return this.http.get(url, { reportProgress: true, observe: 'events', responseType: 'blob' });
   }
 
-  getMovieFile(mediaType: MediaTypeEnum, mediaId: number): Observable<HttpResponse<Blob>> {
-    const url = this.SERVER_URL + MEDIAFILE + `${mediaType}/${mediaId}`;
+  getMovieFile(media: Media): Observable<HttpEvent<Blob>> {
+    console.log(media);
+    const url = this.SERVER_URL + MEDIAFILE + `${media.type}/${media.id}`;
 
-    return this.http.get(url, { observe: 'response', responseType: 'blob' }).pipe(first());
+    return this.http.get(url, { reportProgress: true, observe: 'events', responseType: 'blob' });
   }
 
   searchMedias(searchKey: string): Observable<Media[]> {

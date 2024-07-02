@@ -71,9 +71,8 @@ public class MediaController {
     public ResponseEntity<Resource> getMediaFile(@PathVariable("mediaType") Integer mediaCode, @PathVariable("mediaId") Integer mediaId) {
         MediaTypeEnum mediaType = MediaTypeEnum.getEnum(mediaCode);
 
-        List<MediaFile> mediaFiles;
         try {
-            mediaFiles = mediaService.getMediaFile(mediaType, mediaId);
+            List<MediaFile> mediaFiles = mediaService.getMediaFile(mediaType, mediaId);
             // we should only retrieve one element, if we got more it means its not a movie
             if (mediaFiles != null && mediaFiles.size() == 1) {
                 MediaFile mediaFile = mediaFiles.get(0);

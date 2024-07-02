@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MediaTypeEnum } from '../model/enums/MediaTypeEnum';
 import { PersistenceService } from './persistence.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Media } from '../model/interfaces/Media';
 import { StatesService } from './states.service';
@@ -71,26 +71,6 @@ export class MediasService {
     return this.seasonMedias.includes(mediaType);
   }
 
-  downloadEpisode(media: Media, season: Season, episode: Episode): void {
-    this._persistence.getMediaFile(media.type, media.id, season.id, episode.id).subscribe((response) => {
-      const mediaFile: MediaFile = { file: response?.body, fileName: episode.name };
-
-      this.downloadFile(mediaFile);
-    });
-  }
-
-  downloadSeason(media: Media, season: Season) {
-    season.episodeList.forEach((episode) => this.downloadEpisode(media, season, episode));
-  }
-
-  downloadMedia(media: Media) {
-    this._persistence.getMovieFile(media.type, media.id).subscribe((response) => {
-      const mediaFile: MediaFile = { file: response?.body, fileName: media.name };
-
-      this.downloadFile(mediaFile);
-    });
-  }
-
   downloadFile(mediaFile: MediaFile) {
     const type = this.getType(mediaFile.fileName);
     const blob = new Blob([mediaFile.file], { type: type });
@@ -110,9 +90,15 @@ export class MediasService {
 
   getType(fileName: string) {
     const extension = fileName.slice(-4);
-    if (extension == '.mp4') return 'video/mp4';
-
-    //mkv as default
-    return 'video/x-matroska';
+    switch (extension) {
+      case 'mp4':
+        return 'video/mp4';
+      case 'mp3':
+        return 'audio/mpeg';
+      case 'pdf':
+        return 'application/pdf';
+      default:
+        return 'video/x-matroska'; //mkv as default
+    }
   }
 }

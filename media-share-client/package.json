@@ -2,7 +2,7 @@
   "name": "media-transfer",
   "version": "0.1.0",
   "scripts": {
-    "start": "ng serve",
+    "start": "ng serve  --host 192.168.1.77 --port 16801",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
