@@ -28,4 +28,8 @@ export class HeaderComponent {
     this._states.selectedSection = section;
     this.router.navigate(['']);
   }
+
+  toHomePage() {
+    this.router.navigate(['']);
+  }
 }

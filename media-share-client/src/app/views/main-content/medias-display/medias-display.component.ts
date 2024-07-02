@@ -19,10 +19,7 @@ export class MediasDisplayComponent {
   @Input()
   mediaList: Media[] = [];
 
-  constructor(
-    private _persistence: PersistenceService,
-    private router: Router,
-  ) {}
+  constructor(private router: Router) {}
 
   navigateToDetails(media: Media) {
     this.router.navigate(['/media-detail', media.type, media?.id]);

@@ -2,18 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Media } from '../../model/interfaces/Media';
 import { MediasService } from '../../services/medias.service';
-import { SeasonDetailComponent } from './season-detail/season-detail.component';
-import { MatButtonModule } from '@angular/material/button';
-import { Season } from '../../model/interfaces/Season';
-import { EpisodeListComponent } from './season-detail/episode-list/episode-list.component';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { PersistenceService } from '../../services/persistence.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BehaviorSubject } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { MediaFile } from '../../model/interfaces/MediaFile';
-import { HttpResponse } from '@angular/common/http';
 import { MovieComponent } from './movie/movie.component';
+import { EpisodeListComponent } from './season-detail/episode-list/episode-list.component';
+import { SeasonDetailComponent } from './season-detail/season-detail.component';
 
 @Component({
   selector: 'app-media-detail',
