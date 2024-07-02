@@ -31,6 +31,11 @@ export class MovieComponent {
   ) {}
 
   downloadMedia() {
+    // avoid multiple download request
+    if (this.progress > 0) {
+      return;
+    }
+
     this._persistence.getMovieFile(this.media).subscribe((event) => {
       if (event.type == 3) {
         const progress = (event.loaded / event.total) * 100;

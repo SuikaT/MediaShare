@@ -47,7 +47,12 @@ export class EpisodeComponent implements OnInit {
     this.downloadEvent.subscribe(() => this.download());
   }
 
-  download() {
+  download(): void {
+    // avoid multiple download request
+    if (this.progress > 0) {
+      return;
+    }
+
     this._persistence.getMediaFile(this.media.type, this.media.id, this.season.id, this.episode.id).subscribe((event) => {
       // progress event
       if (event.type == 3) {
