@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -94,7 +95,7 @@ public class MediaService {
         if (mediaList == null)
             return null;
 
-        return mediaList.stream().filter(m -> m.getId() == mediaId).findFirst().orElse(null);
+        return mediaList.stream().filter(m -> Objects.equals(m.getId(), mediaId)).findFirst().orElse(null);
     }
 
     public Season getSeasonByTypeAndId(MediaTypeEnum mediaType, Integer mediaId, Integer seasonId) {
@@ -102,7 +103,7 @@ public class MediaService {
         if (media == null)
             return null;
 
-        return media.getSeasonList().stream().filter(s -> s.getId() == seasonId).findFirst().orElse(null);
+        return media.getSeasonList().stream().filter(s -> Objects.equals(s.getId(), seasonId)).findFirst().orElse(null);
     }
 
     public Episode getEpisodeByTypeAndId(MediaTypeEnum mediaType, Integer mediaId, Integer seasonId, Integer episodeId) {
@@ -110,7 +111,7 @@ public class MediaService {
         if (season == null)
             return null;
 
-        return season.getEpisodeList().stream().filter(e -> e.getId() == episodeId).findFirst().orElse(null);
+        return season.getEpisodeList().stream().filter(e -> Objects.equals(e.getId(), episodeId)).findFirst().orElse(null);
     }
 
     public List<MediaFile> getMediaFile(MediaTypeEnum mediaType, Integer mediaId) throws IOException, NullPointerException {

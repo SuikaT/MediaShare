@@ -31,17 +31,19 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     @Autowired
     MediaService mediaService;
 
+    Integer mediaIndex;
+
     @Override
     public void retrieveAllMedias() {
 
-        Integer index = 0;
+        mediaIndex = 0;
         Map<MediaTypeEnum, List<Media>> mediaMap = new HashMap<>();
         for (MediaTypeEnum mediaType : MediaTypeEnum.values()) {
             List<Media> medias = new ArrayList<>();
             if (mediaType.isSeasons())
-                medias = retrieveSeasonMedia(appProperties.getDirectories(mediaType), mediaType, index);
+                medias = retrieveSeasonMedia(appProperties.getDirectories(mediaType), mediaType);
             else
-                medias = retrieveNotSeasonMedia(appProperties.getDirectories(mediaType), mediaType, index);
+                medias = retrieveNotSeasonMedia(appProperties.getDirectories(mediaType), mediaType);
 
             mediaMap.put(mediaType, medias);
         }
@@ -49,36 +51,36 @@ public class AcquisitionServiceImpl implements AcquisitionService {
         mediaService.setMediaMap(mediaMap);
     }
 
-    private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
+    private List<Media> retrieveSeasonMedia(List<String> directoryList, MediaTypeEnum type) {
         List<Media> mediaList = new ArrayList<>();
 
         for (String dir : directoryList) {
-            List<Media> medias = findSeasonMedias(dir, type, index);
+            List<Media> medias = findSeasonMedias(dir, type);
             mediaList.addAll(medias);
         }
 
         return mediaList;
     }
 
-    private List<Media> retrieveNotSeasonMedia(List<String> directoryList, MediaTypeEnum type, Integer index) {
+    private List<Media> retrieveNotSeasonMedia(List<String> directoryList, MediaTypeEnum type) {
         List<Media> films = new ArrayList<>();
         for (String dir : directoryList) {
-            findDeepMedia(dir, films, type, index);
+            findDeepMedia(dir, films, type);
         }
         return films;
     }
 
     // @seasons behavior differs if searched medias can have seasons
-    private List<Media> findSeasonMedias(String dir, MediaTypeEnum type, Integer index) {
+    private List<Media> findSeasonMedias(String dir, MediaTypeEnum type) {
         List<Media> mediaList = new ArrayList<>();
         try {
             List<File> files = getFiles(dir);
             for (File file : files) {
                 if (file.isDirectory()) {
-                    Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.length());
+                    Media media = new Media(mediaIndex, file.getName(), file.getAbsolutePath(), type, file.length());
                     findSeasons(media);
                     mediaList.add(media);
-                    index++;
+                    mediaIndex++;
                 }
             }
         } catch (Exception e) {
@@ -98,18 +100,16 @@ public class AcquisitionServiceImpl implements AcquisitionService {
     }
 
     // Retrieve all media from the given directory and all its subdirectories
-    private Integer findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type, Integer index) {
+    private void findDeepMedia(String dir, List<Media> medias, MediaTypeEnum type) {
         for (File file : getFiles(dir)) {
             if (file.isDirectory()) {
-                index = findDeepMedia(file.getAbsolutePath(), medias, type, index);
+                findDeepMedia(file.getAbsolutePath(), medias, type);
             } else {
-                Media media = new Media(index, file.getName(), file.getAbsolutePath(), type, file.length());
+                Media media = new Media(mediaIndex, file.getName(), file.getAbsolutePath(), type, file.length());
                 medias.add(media);
-                index++;
+                mediaIndex++;
             }
         }
-
-        return index;
     }
 
     private void findSeasons(Media media) {
