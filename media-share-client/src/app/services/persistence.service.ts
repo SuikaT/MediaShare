@@ -25,8 +25,8 @@ export class PersistenceService {
     return this.http.get<Map<MediaTypeEnum, Media[]>>(this.SERVER_URL + MEDIAS, {}).pipe(first());
   }
 
-  getMedias(mediaTypes: MediaTypeEnum, maxAmount: number, index: number): Observable<Media[]> {
-    return this.http.get<Media[]>(this.SERVER_URL + MEDIAS_BY_TYPE, { params: { mediaType: mediaTypes, maxAmount: maxAmount, index: index } }).pipe(first());
+  getMedias(mediaTypes: MediaTypeEnum): Observable<Media[]> {
+    return this.http.get<Media[]>(this.SERVER_URL + MEDIAS_BY_TYPE, { params: { mediaType: mediaTypes } }).pipe(first());
   }
 
   getMedia(mediaType: MediaTypeEnum, mediaId: number): Observable<Media> {

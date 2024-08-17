@@ -36,7 +36,7 @@ export class MediasService {
   }
 
   public updateDisplayedMedias(section: Section): void {
-    this._persistence.getMedias(section.mediaType, 60, 0).subscribe((response) => {
+    this._persistence.getMedias(section.mediaType).subscribe((response) => {
       if (response) {
         this.displayedMedias = response;
       }

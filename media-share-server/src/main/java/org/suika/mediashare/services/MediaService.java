@@ -42,27 +42,18 @@ public class MediaService {
 
     private Map<MediaTypeEnum, List<Media>> mediaMap = new HashMap<>();
 
-    public List<Media> getMediasByType(MediaTypeEnum mediaType, Integer maxAmount, int index) {
+    public List<Media> getMediasByType(MediaTypeEnum mediaType) {
         try {
 
             List<Media> mediaList = mediaMap.get(mediaType);
             if (mediaList == null)
                 throw new IllegalArgumentException("mediaList is null");
 
-            Integer size = mediaList.size();
-            if (index >= size)
-                throw new IllegalArgumentException("required index doesn't exist");
-
-            Integer toIndex = index + maxAmount;
-            if (toIndex > size)
-                toIndex = maxAmount - (maxAmount - size);
-
-            return mediaList.subList(index, toIndex);
+            return mediaList;
 
         } catch (Exception e) {
             return new ArrayList<>();
         }
-
     }
 
     public boolean addMedia(Media media) {
