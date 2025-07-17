@@ -1,5 +1,5 @@
 export const apiConfig = {
-  host: '88.127.177.11',
+  host: 'mediatransfer.ddns.net',
   port: '16800',
   protocol: 'http',
 };
